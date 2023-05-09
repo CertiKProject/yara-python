@@ -1236,6 +1236,11 @@ class TestYara(unittest.TestCase):
         rules = yara.compile(source=rules)
         self.assertListEqual(rules.warnings, expected)
 
+    def testModuleCtk(self):
+        self.assertTrueRules([
+            'import "ctk" rule test { strings: $f = /foo/ condition: $f and ctk.text(@f, 20) contains "bool" }',
+        ], "function foo() returns (bool) { return false }")
+
 
 if __name__ == "__main__":
     unittest.main()
